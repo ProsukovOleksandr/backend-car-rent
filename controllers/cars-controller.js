@@ -4,9 +4,12 @@ import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 const getAll = async (req, res) => {
   //const {_id: owner} = req.user;
- const {page = 1, limit = 10} = req.query;
- const skip = (page-1)*limit;
-  const result = await Car.find();/*"-createdAt -updatedAt", {skip, limit} */
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 12;
+
+  const startIndex = (page - 1) * pageSize;
+
+  const result = await Car.find().skip(startIndex).limit(pageSize);
   res.json(result);
 };
 
